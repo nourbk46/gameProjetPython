@@ -2,7 +2,12 @@ import pygame
 import math
 from game import Game
 pygame.init()
-#gen9erer fenetre
+
+#definir une clock
+clock=pygame.time.Clock()
+FPS=60
+
+#generer fenetre
 pygame.display.set_caption("comet full game")
 screen=pygame.display.set_mode((1000,700))
 
@@ -53,12 +58,22 @@ while running:
 
             #detecter si la touche espace est enclenchée pour lancer notre projectile
             if event.key==pygame.K_SPACE:
-                game.player.launch_projectile()
+                if game.is_playing:
+                    game.player.launch_projectile()
+                else:
+                    game.start()
+                    # jouer le son
+                    game.sound_manager.play('click')
+
         elif event.type==pygame.KEYUP:
             game.pressed[event.key]=False
 
         elif event.type==pygame.MOUSEBUTTONDOWN:
             if play_button_rect.collidepoint(event.pos):
                 game.start()
+                #jouer le son
+                game.sound_manager.play('click')
 
 
+    #fixer le nombre de fps sur ma clock
+    clock.tick(FPS)

@@ -1,19 +1,19 @@
 import pygame
 from projectile import projectile
+import animation
 
 #creer premiere class
 
 
-class Player(pygame.sprite.Sprite):
+class Player(animation.AnimateSprite):
     def __init__(self,game):
-        super().__init__()
+        super().__init__('player')
         self.game=game
         self.health=100
         self.max_health=100
         self.attack=10
         self.velocity=1
         self.all_projectiles=pygame.sprite.Group()
-        self.image=pygame.image.load('PygameAssets-main/player.png')
         self.rect=self.image.get_rect()
         self.rect.x=400
         self.rect.y=500
@@ -25,6 +25,9 @@ class Player(pygame.sprite.Sprite):
             #si le joeur n'ap pas de vie
             self.game.game_over()
 
+    def update_animation(self):
+        self.animate()
+
 
     def update_health_bar(self,surface):
         #dessiner notre barre de vie
@@ -35,6 +38,10 @@ class Player(pygame.sprite.Sprite):
     def launch_projectile(self):
         #creer une nouvelle instance de la classe projectile
         self.all_projectiles.add(projectile(self))
+        #demarer l'animation
+        self.start_animation()
+        #jouer le son
+        self.game.sound_manager.play('tir')
 
 
 
